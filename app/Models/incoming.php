@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Petition extends Model
+class incoming extends Model
 {
     //
 }
