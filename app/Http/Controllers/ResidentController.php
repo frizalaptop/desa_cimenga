@@ -13,8 +13,7 @@ class ResidentController extends Controller
      */
     public function index()
     {
-        $resident = Resident::where('user_id', Auth::id())->first();
-        return view('residents.index', compact('resident'));
+        
     }
 
     /**
@@ -22,13 +21,7 @@ class ResidentController extends Controller
      */
     public function create()
     {
-        // Cegah jika sudah ada data resident untuk user ini
-        if (Resident::where('user_id', Auth::id())->exists()) {
-            return redirect()->route('residents.index')
-                ->with('error', 'Anda sudah memiliki data penduduk.');
-        }
-
-        return view('residents.create');
+        
     }
 
     /**
@@ -36,35 +29,38 @@ class ResidentController extends Controller
      */
     public function store(Request $request)
     {
-        // Pastikan user belum punya data penduduk
-        if (Resident::where('user_id', Auth::id())->exists()) {
-            return redirect()->route('residents.index')
-                ->with('error', 'Anda sudah memiliki data penduduk.');
+        $resident = Resident::where('user_id', Auth::id())->first();
+
+        $rules = [
+            'nik' => 'required|numeric|digits:16|unique:residents,nik,'.($resident ? $resident->id : 'NULL').',id,user_id,'.Auth::id(),
+            'kk' => 'nullable|numeric|digits:16',
+            'nama' => 'required|string|max:255',
+            'tempat_lahir' => 'required|string|max:100',
+            'tanggal_lahir' => 'required|date|before:today',
+            'jenis_kelamin' => 'required|in:L,P',
+            'alamat' => 'required|string',
+            'rt' => 'required|numeric|',
+            'rw' => 'required|numeric|',
+            'agama' => 'required|string|max:50',
+            'status_perkawinan' => 'required|string|max:50',
+            'pekerjaan' => 'required|string|max:100',
+            'kewarganegaraan' => 'required|string|max:50',
+        ];
+
+        $validated = $request->validate($rules);
+
+        if ($resident) {
+            // Update data yang sudah ada
+            $resident->update($validated);
+            $message = 'Data penduduk berhasil diperbarui';
+        } else {
+            // Buat data baru
+            $validated['user_id'] = Auth::id();
+            Resident::create($validated);
+            $message = 'Data penduduk berhasil disimpan';
         }
 
-        $request->validate([
-            'nik' => 'required|unique:residents,nik',
-            'kk' => 'nullable|string|max:16',
-            'nama' => 'required|string|max:255',
-            'tempat_lahir' => 'nullable|string|max:100',
-            'tanggal_lahir' => 'nullable|date',
-            'jenis_kelamin' => 'required|in:L,P',
-            'alamat' => 'nullable|string',
-            'rt' => 'nullable|string|max:3',
-            'rw' => 'nullable|string|max:3',
-            'agama' => 'nullable|string|max:50',
-            'status_perkawinan' => 'nullable|string|max:50',
-            'pekerjaan' => 'nullable|string|max:100',
-            'kewarganegaraan' => 'nullable|string|max:50',
-        ]);
-
-        Resident::create([
-            ...$request->all(),
-            'user_id' => Auth::id(), // otomatis terhubung
-        ]);
-
-        return redirect()->route('residents.index')
-            ->with('success', 'Data penduduk berhasil ditambahkan.');
+        return redirect()->route('residents.show', Auth::user()->id)->with('success', $message);
     }
 
     /**
@@ -72,8 +68,8 @@ class ResidentController extends Controller
      */
     public function show()
     {
-        $resident = Resident::where('user_id', Auth::id())->firstOrFail();
-        return view('residents.show', compact('resident'));
+        $resident = Resident::where('user_id', Auth::id())->first();
+        return view('residents.form', compact('resident'));
     }
 
     /**
@@ -81,8 +77,7 @@ class ResidentController extends Controller
      */
     public function edit()
     {
-        $resident = Resident::where('user_id', Auth::id())->firstOrFail();
-        return view('residents.edit', compact('resident'));
+        
     }
 
     /**
@@ -90,28 +85,7 @@ class ResidentController extends Controller
      */
     public function update(Request $request)
     {
-        $resident = Resident::where('user_id', Auth::id())->firstOrFail();
-
-        $request->validate([
-            'nik' => 'required|unique:residents,nik,' . $resident->id,
-            'kk' => 'nullable|string|max:16',
-            'nama' => 'required|string|max:255',
-            'tempat_lahir' => 'nullable|string|max:100',
-            'tanggal_lahir' => 'nullable|date',
-            'jenis_kelamin' => 'required|in:L,P',
-            'alamat' => 'nullable|string',
-            'rt' => 'nullable|string|max:3',
-            'rw' => 'nullable|string|max:3',
-            'agama' => 'nullable|string|max:50',
-            'status_perkawinan' => 'nullable|string|max:50',
-            'pekerjaan' => 'nullable|string|max:100',
-            'kewarganegaraan' => 'nullable|string|max:50',
-        ]);
-
-        $resident->update($request->all());
-
-        return redirect()->route('residents.index')
-            ->with('success', 'Data penduduk berhasil diperbarui.');
+        
     }
 
     /**
@@ -119,10 +93,6 @@ class ResidentController extends Controller
      */
     public function destroy()
     {
-        $resident = Resident::where('user_id', Auth::id())->firstOrFail();
-        $resident->delete();
-
-        return redirect()->route('residents.index')
-            ->with('success', 'Data penduduk berhasil dihapus.');
+        
     }
 }

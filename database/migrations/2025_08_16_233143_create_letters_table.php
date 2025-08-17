@@ -13,6 +13,7 @@ return new class extends Migration
             $table->string('nama_surat');
             $table->string('kode_surat')->unique();
             $table->string('template_file')->nullable(); // path ke file template
+            $table->timestamps();
         });
     }
 

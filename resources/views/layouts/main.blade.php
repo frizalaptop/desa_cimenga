@@ -127,27 +127,27 @@
                     
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link active" href="{{ route('dashboard') }}">
+                            <a class="nav-link" href="{{ route('dashboard') }}" id="dashboard-menu">
                                 <i class="fas fa-tachometer-alt"></i> Dashboard
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('residents.index') }}">
+                            <a class="nav-link" href="{{ route('residents.show', Auth::user()->id) }}" id="residents-menu">
                                 <i class="fas fa-user"></i> Data Diri
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="#" id="letters-menu">
                                 <i class="fas fa-envelope"></i> Surat Menyurat
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="#" id="reports-menu">
                                 <i class="fas fa-chart-bar"></i> Laporan
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="#" id="settings-menu">
                                 <i class="fas fa-cog"></i> Pengaturan
                             </a>
                         </li>
@@ -212,7 +212,34 @@
             })
         })
     </script>
-    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Hapus semua class active terlebih dahulu
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+
+            // Tentukan menu yang aktif berdasarkan URL
+            const currentPath = window.location.pathname;
+            let activeMenuId = 'dashboard-menu'; // default
+            
+            if (currentPath.includes('/data-diri') || currentPath.includes('/residents')) {
+                activeMenuId = 'residents-menu';
+            } else if (currentPath.includes('/surat') || currentPath.includes('/letters')) {
+                activeMenuId = 'letters-menu';
+            } else if (currentPath.includes('/laporan') || currentPath.includes('/reports')) {
+                activeMenuId = 'reports-menu';
+            } else if (currentPath.includes('/pengaturan') || currentPath.includes('/settings')) {
+                activeMenuId = 'settings-menu';
+            }
+
+            // Tambahkan class active ke menu yang sesuai
+            const activeMenu = document.getElementById(activeMenuId);
+            if (activeMenu) {
+                activeMenu.classList.add('active');
+            }
+        });
+    </script>
     @stack('scripts')
 </body>
 </html>

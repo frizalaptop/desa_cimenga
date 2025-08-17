@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('status_perkawinan')->nullable();
             $table->string('pekerjaan')->nullable();
             $table->string('kewarganegaraan')->default('WNI');
+            $table->timestamps();
             
             // Relasi ke users (jika warga punya akun)
             $table->foreignId('user_id')->nullable()->constrained('users')->cascadeOnDelete();
