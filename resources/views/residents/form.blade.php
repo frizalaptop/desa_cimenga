@@ -185,7 +185,7 @@
                     </div>
 
                     <div class="d-flex justify-content-between mt-4">
-                        <a href="{{ url()->previous() }}" class="btn btn-outline-secondary">
+                        <a href="{{ route('dashboard') }}" class="btn btn-outline-secondary">
                             <i class="fas fa-arrow-left me-2"></i> Kembali
                         </a>
                         <button type="submit" class="btn btn-primary">
