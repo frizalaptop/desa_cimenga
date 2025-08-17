@@ -2,7 +2,7 @@
     <div class="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
         <div class="sm:mx-auto sm:w-full sm:max-w-md">
             <div class="flex justify-center">
-                <img class="logo-img h-24 w-auto" src="{{ asset('images/logo.jpeg') }}" alt="Logo Desa">
+                <img class="logo-img h-24 w-auto" src="{{ asset('images/logo.png') }}" alt="Logo Desa">
             </div>
         </div>
 
