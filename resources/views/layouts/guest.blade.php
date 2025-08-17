@@ -19,6 +19,9 @@
                 width: auto;
                 margin-bottom: 1rem;
             }
+            .card-guest {
+                padding: 1rem;
+            }
         </style>
     </head>
     <body class="font-sans text-gray-900 antialiased">
