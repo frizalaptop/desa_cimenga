@@ -23,3 +23,4 @@ class Letter extends Model
         return $this->hasMany(Petition::class);
     }
 }
+ 

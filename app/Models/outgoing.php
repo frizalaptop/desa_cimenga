@@ -19,3 +19,4 @@ class Outgoing extends Model
         'file_pdf',
     ];
 }
+ 

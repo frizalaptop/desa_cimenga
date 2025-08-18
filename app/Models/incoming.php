@@ -19,3 +19,4 @@ class Incoming extends Model
         'file_scan',
     ];
 }
+ 

@@ -44,3 +44,4 @@ class Resident extends Model
         'tanggal_lahir' => 'date',
     ];
 }
+ 
