@@ -137,6 +137,11 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" href="{{ route('users.index') }}" id="users-menu">
+                                <i class="fas fa-users"></i> Daftar Pengguna
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="{{ route('letters.index') }}" id="letters-menu">
                                 <i class="fas fa-envelope"></i> Surat Menyurat
                             </a>
@@ -225,13 +230,15 @@
             
             if (currentPath.includes('/data-diri') || currentPath.includes('/residents')) {
                 activeMenuId = 'residents-menu';
+            } else if (currentPath.includes('/pengguna') || currentPath.includes('/users')) {
+                activeMenuId = 'users-menu';
             } else if (currentPath.includes('/surat') || currentPath.includes('/letters')) {
                 activeMenuId = 'letters-menu';
             } else if (currentPath.includes('/laporan') || currentPath.includes('/petitions')) {
                 activeMenuId = 'reports-menu';
             } else if (currentPath.includes('/pengaturan') || currentPath.includes('/settings')) {
                 activeMenuId = 'settings-menu';
-            }
+            } 
 
             // Tambahkan class active ke menu yang sesuai
             const activeMenu = document.getElementById(activeMenuId);

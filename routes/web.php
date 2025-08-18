@@ -4,6 +4,7 @@ use App\Http\Controllers\LetterController;
 use App\Http\Controllers\PetitionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ResidentController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -51,5 +52,14 @@ Route::delete('petitions/reset', [PetitionController::class, 'reset'])
 Route::resource('petitions', PetitionController::class)
     ->middleware(['auth', 'verified'])
     ->names('petitions');
+
+Route::controller( UserController::class)->group(function () {
+    Route::get('users', 'index')
+        ->name('users.index');
+    Route::put('users/{user}/promote', 'promote')
+        ->name('users.promote');
+    Route::put('users/{user}/demote', 'demote')
+        ->name('users.demote');
+})->middleware(['auth', 'verified']);
 
 require __DIR__.'/auth.php';
