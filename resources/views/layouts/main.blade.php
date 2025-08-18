@@ -136,11 +136,13 @@
                                 <i class="fas fa-user"></i> Data Diri
                             </a>
                         </li>
+                        @if(Auth::user()->role == 'Sekretaris')
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('users.index') }}" id="users-menu">
                                 <i class="fas fa-users"></i> Daftar Pengguna
                             </a>
                         </li>
+                        @endif
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('letters.index') }}" id="letters-menu">
                                 <i class="fas fa-envelope"></i> Surat Menyurat
