@@ -24,13 +24,29 @@ Route::resource('residents', ResidentController::class)
     ->middleware(['auth', 'verified'])
     ->names('residents');
 
-Route::get('apply/{letter}', [LetterController::class, 'apply'])
+Route::get('letters/{letter}/apply', [LetterController::class, 'apply'])
     ->middleware(['auth', 'verified'])
     ->name('letters.apply');     
 
 Route::resource('letters', LetterController::class)
     ->middleware(['auth', 'verified'])
     ->names('letters');
+
+Route::put('petitions/{petition}/approve', [PetitionController::class, 'approve'])
+    ->middleware(['auth', 'verified'])
+    ->name('petitions.approve'); 
+
+Route::put('petitions/{petition}/reject', [PetitionController::class, 'reject'])
+    ->middleware(['auth', 'verified'])
+    ->name('petitions.reject'); 
+
+Route::put('petitions/{petition}/complete', [PetitionController::class, 'complete'])
+    ->middleware(['auth', 'verified'])
+    ->name('petitions.complete'); 
+
+Route::delete('petitions/reset', [PetitionController::class, 'reset'])
+    ->middleware(['auth', 'verified'])
+    ->name('petitions.reset'); 
 
 Route::resource('petitions', PetitionController::class)
     ->middleware(['auth', 'verified'])

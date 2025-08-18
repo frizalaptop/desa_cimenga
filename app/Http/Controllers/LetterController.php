@@ -126,11 +126,11 @@ class LetterController extends Controller
         $resident = Resident::where('user_id', Auth::id())->first();
 
         if (!$resident) {
-            return back()->withErrors('Data penduduk tidak ditemukan, silakan lengkapi data diri terlebih dahulu.');
+            return back()->with('error', 'Data penduduk tidak ditemukan, silakan lengkapi data diri terlebih dahulu.');
         }
 
         if (!$letter->template_file) {
-            return back()->withErrors('Layanan belum tersedia.');
+            return back()->with('error', 'Layanan belum tersedia.');
         }
 
         // Simpan pengajuan
@@ -139,7 +139,6 @@ class LetterController extends Controller
             'letter_id'   => $letter->id,
             'keperluan'   => $letter->nama_surat,
             'status'      => 'pending', // default
-            'file_pdf' => $letter->template_file,
         ]);
 
         return redirect()

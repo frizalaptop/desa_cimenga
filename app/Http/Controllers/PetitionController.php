@@ -14,6 +14,10 @@ class PetitionController extends Controller
     {
         
         $user = $request->user();
+
+        if (!$user->resident) {
+            return back()->with('error', 'Data penduduk tidak ditemukan, silakan lengkapi data diri terlebih dahulu.');
+        }
         
         if ($user->role === 'Warga') {
             // Untuk warga, hanya tampilkan pengajuan miliknya saja
@@ -57,7 +61,10 @@ class PetitionController extends Controller
      */
     public function show(petition $petition)
     {
-        //
+        if (auth()->user()->role === 'Warga' && $petition->resident_id !== auth()->user()->resident->id) {
+            abort(403, 'Anda tidak memiliki akses ke pengajuan ini');
+        }
+        return view('petitions.show', compact('petition'));
     }
 
     /**
@@ -82,5 +89,120 @@ class PetitionController extends Controller
     public function destroy(petition $petition)
     {
         //
+    }
+
+    public function approve(Request $request, Petition $petition)
+    {
+        // Otorisasi - hanya sekretaris yang bisa approve
+        if (auth()->user()->role !== 'Sekretaris') {
+            abort(403, 'Anda tidak memiliki hak akses untuk menyetujui pengajuan');
+        }
+
+        // Validasi status harus pending
+        if ($petition->status !== 'pending') {
+            return redirect()->back()
+                ->with('error', 'Hanya pengajuan dengan status pending yang bisa disetujui');
+        }
+
+        try {
+            // Update data pengajuan
+            $petition->update([
+                'status' => 'disetujui',
+            ]);
+
+            // Redirect dengan pesan sukses
+        return redirect()->route('petitions.show', $petition->id)
+            ->with('success', 'Pengajuan surat berhasil disetujui');
+
+    } catch (\Exception $e) {
+        // Handle error
+        return redirect()->back()
+            ->with('error', 'Gagal menyetujui pengajuan: ' . $e->getMessage());
+    }
+}
+
+    public function reject(Request $request, Petition $petition)
+    {
+        // Otorisasi - hanya sekretaris yang bisa reject
+        if (auth()->user()->role !== 'Sekretaris') {
+            abort(403, 'Anda tidak memiliki hak akses untuk menolak pengajuan');
+        }
+
+        // Validasi status harus pending
+        if ($petition->status !== 'pending') {
+            return redirect()->back()
+                ->with('error', 'Hanya pengajuan dengan status pending yang bisa ditolak');
+        }
+        
+        try {
+            // Update data pengajuan
+            $petition->update([
+                'status' => 'ditolak',
+            ]);
+
+
+            // Redirect dengan pesan sukses
+            return redirect()->route('petitions.show', $petition->id)
+                ->with('success', 'Pengajuan surat berhasil ditolak');
+
+        } catch (\Exception $e) {
+            // Handle error
+            return redirect()->back()
+                ->with('error', 'Gagal menolak pengajuan: ' . $e->getMessage());
+        }
+    }
+
+    public function complete(Request $request, Petition $petition)
+    {
+        // Otorisasi - hanya sekretaris yang bisa complete
+        if (auth()->user()->role !== 'Sekretaris') {
+            abort(403, 'Anda tidak memiliki hak akses untuk menyelesaikan pengajuan');
+        }
+
+        // Validasi status harus disetujui
+        if ($petition->status !== 'disetujui') {
+            return redirect()->back()
+                ->with('error', 'Hanya pengajuan yang sudah disetujui yang bisa diselesaikan');
+        }
+
+        try {
+            // Update data pengajuan
+            $petition->update([
+                'status' => 'selesai',
+            ]);
+
+            // Redirect dengan pesan sukses
+            return redirect()->route('petitions.show', $petition->id)
+                ->with('success', 'Pengajuan surat berhasil diselesaikan');
+
+        } catch (\Exception $e) {
+            // Handle error
+            return redirect()->back()
+                ->with('error', 'Gagal menyelesaikan pengajuan: ' . $e->getMessage());
+        }
+    }
+
+    public function reset(Request $request)
+    {
+        // Otorisasi ketat - hanya super admin atau sekretaris utama
+        if (auth()->user()->role !== 'Sekretaris') {
+            abort(403, 'Anda tidak memiliki hak akses untuk tindakan ini');
+        }
+
+        // Validasi konfirmasi
+        if (!$request->has('confirmationCheck')) {
+            return redirect()->back()
+                ->with('error', 'Anda harus mencentang kotak konfirmasi');
+        }
+
+        try {
+            Petition::truncate();
+            return redirect()->route('petitions.index')
+                ->with('success', "Berhasil menghapus semua data pengajuan surat");
+
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'Gagal menghapus data: ' . $e->getMessage());
+        }
     }
 }

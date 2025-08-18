@@ -39,4 +39,8 @@ class Resident extends Model
     {
         return $this->hasMany(Petition::class);
     }
+
+    protected $casts = [
+        'tanggal_lahir' => 'date',
+    ];
 }

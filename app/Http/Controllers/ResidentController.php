@@ -32,7 +32,7 @@ class ResidentController extends Controller
         $resident = Resident::where('user_id', Auth::id())->first();
 
         $rules = [
-            'nik' => 'required|numeric|digits:16|unique:residents,nik,'.($resident ? $resident->id : 'NULL').',id,user_id,'.Auth::id(),
+            'nik' => 'required|numeric|digits:16|unique:residents,nik,'.Auth::id(),
             'kk' => 'nullable|numeric|digits:16',
             'nama' => 'required|string|max:255',
             'tempat_lahir' => 'required|string|max:100',

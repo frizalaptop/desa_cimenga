@@ -2,6 +2,18 @@
 @section('title', 'Laporan Pengajuan Surat')
 @section('content')
 
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="d-flex justify-content-end align-items-center">
+            @if(auth()->user()->role === 'Sekretaris' && $petitions->count() > 0)
+            <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#resetAllModal">
+                <i class="fas fa-trash-alt me-2"></i> Hapus Semua
+            </button>
+            @endif
+        </div>
+    </div>
+</div>
+
 <div class="row">
     <div class="col-12">
         <div class="card">
@@ -40,17 +52,6 @@
                                     <a href="{{ route('petitions.show', $petition->id) }}" class="btn btn-sm btn-outline-primary">
                                         <i class="fas fa-eye"></i> Detail
                                     </a>
-                                    @if(auth()->user()->role === 'Sekretaris' && $petition->status === 'pending')
-                                        <!-- Tombol aksi untuk sekretaris jika status pending -->
-                                        <div class="btn-group">
-                                            <button type="button" class="btn btn-sm btn-outline-success" data-bs-toggle="modal" data-bs-target="#approveModal{{ $petition->id }}">
-                                                <i class="fas fa-check"></i> Setujui
-                                            </button>
-                                            <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#rejectModal{{ $petition->id }}">
-                                                <i class="fas fa-times"></i> Tolak
-                                            </button>
-                                        </div>
-                                    @endif
                                 </td>
                             </tr>
                             @empty
@@ -118,5 +119,35 @@
             </div>
         </div>
     @endif
+
+<div class="modal fade" id="resetAllModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="{{ route('petitions.reset') }}" method="POST">
+                @csrf
+                @method('DELETE')
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title">Konfirmasi Reset</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Anda akan menghapus SEMUA data pengajuan surat. Tindakan ini tidak dapat dibatalkan!</p>
+                    <p class="fw-bold">Total data yang akan dihapus: {{ $petitions->count() }}</p>
+                    <div class="form-check mt-3">
+                        <input class="form-check-input" type="checkbox" id="confirmationCheck" name="confirmationCheck">
+                        <label class="form-check-label" for="confirmationCheck">
+                            Saya mengerti dan ingin melanjutkan
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-danger">Hapus Semua</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 @endforeach
 @endsection
