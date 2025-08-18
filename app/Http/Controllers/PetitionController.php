@@ -10,9 +10,30 @@ class PetitionController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        
+        $user = $request->user();
+        
+        if ($user->role === 'Warga') {
+            // Untuk warga, hanya tampilkan pengajuan miliknya saja
+            $petitions = Petition::with(['letter', 'resident'])
+                ->where('resident_id', $user->resident->id)
+                ->latest()
+                ->get();
+        } else {
+            // Untuk sekretaris, tampilkan semua pengajuan dengan filter opsional
+            $status = request()->query('status');
+            
+            $petitions = Petition::with(['letter', 'resident'])
+                ->when($status, function($query, $status) {
+                    return $query->where('status', $status);
+                })
+                ->latest()
+                ->get();
+        }
+        
+        return view('petitions.index', compact('petitions'));
     }
 
     /**

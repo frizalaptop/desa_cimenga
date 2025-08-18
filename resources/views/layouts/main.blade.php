@@ -137,12 +137,12 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#" id="letters-menu">
+                            <a class="nav-link" href="{{ route('letters.index') }}" id="letters-menu">
                                 <i class="fas fa-envelope"></i> Surat Menyurat
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#" id="reports-menu">
+                            <a class="nav-link" href="{{ route('petitions.index') }}" id="reports-menu">
                                 <i class="fas fa-chart-bar"></i> Laporan
                             </a>
                         </li>
@@ -227,7 +227,7 @@
                 activeMenuId = 'residents-menu';
             } else if (currentPath.includes('/surat') || currentPath.includes('/letters')) {
                 activeMenuId = 'letters-menu';
-            } else if (currentPath.includes('/laporan') || currentPath.includes('/reports')) {
+            } else if (currentPath.includes('/laporan') || currentPath.includes('/petitions')) {
                 activeMenuId = 'reports-menu';
             } else if (currentPath.includes('/pengaturan') || currentPath.includes('/settings')) {
                 activeMenuId = 'settings-menu';

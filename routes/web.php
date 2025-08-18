@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\LetterController;
+use App\Http\Controllers\PetitionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ResidentController;
 use Illuminate\Support\Facades\Route;
@@ -21,5 +23,17 @@ Route::middleware('auth')->group(function () {
 Route::resource('residents', ResidentController::class)
     ->middleware(['auth', 'verified'])
     ->names('residents');
+
+Route::get('apply/{letter}', [LetterController::class, 'apply'])
+    ->middleware(['auth', 'verified'])
+    ->name('letters.apply');     
+
+Route::resource('letters', LetterController::class)
+    ->middleware(['auth', 'verified'])
+    ->names('letters');
+
+Route::resource('petitions', PetitionController::class)
+    ->middleware(['auth', 'verified'])
+    ->names('petitions');
 
 require __DIR__.'/auth.php';
