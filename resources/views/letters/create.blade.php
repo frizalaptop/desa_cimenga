@@ -33,7 +33,7 @@
                                 @error('nama_surat')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
-                                <small class="text-muted">Contoh: Surat Keterangan Domisili</small>
+                                <small class="text-muted">Contoh: Surat Keterangan</small>
                             </div>
                         </div>
 

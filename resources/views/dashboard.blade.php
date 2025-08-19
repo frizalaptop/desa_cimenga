@@ -125,57 +125,14 @@
                         <div class="border p-3 rounded h-100">
                             <div class="d-flex align-items-center mb-2">
                                 <div class="bg-primary-light rounded-circle p-2 me-3">
-                                    <i class="fas fa-home text-primary"></i>
+                                    <i class="fas fa-id-card text-primary"></i>
                                 </div>
-                                <h6 class="mb-0">Surat Domisili</h6>
+                                <h6 class="mb-0">Surat Pengantar E-KTP</h6>
                             </div>
-                            <p class="small text-muted mb-0">Keterangan tempat tinggal</p>
+                            <p class="small text-muted mb-0">Pengantar pembuatan KTP elektronik</p>
                         </div>
                     </div>
-                    <div class="col-md-6">
-                        <div class="border p-3 rounded h-100">
-                            <div class="d-flex align-items-center mb-2">
-                                <div class="bg-primary-light rounded-circle p-2 me-3">
-                                    <i class="fas fa-user-tie text-primary"></i>
-                                </div>
-                                <h6 class="mb-0">Surat Keterangan Tidak Mampu</h6>
-                            </div>
-                            <p class="small text-muted mb-0">Untuk pengajuan bantuan</p>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="border p-3 rounded h-100">
-                            <div class="d-flex align-items-center mb-2">
-                                <div class="bg-primary-light rounded-circle p-2 me-3">
-                                    <i class="fas fa-baby text-primary"></i>
-                                </div>
-                                <h6 class="mb-0">Surat Kelahiran</h6>
-                            </div>
-                            <p class="small text-muted mb-0">Pencatatan kelahiran bayi</p>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="border p-3 rounded h-100">
-                            <div class="d-flex align-items-center mb-2">
-                                <div class="bg-primary-light rounded-circle p-2 me-3">
-                                    <i class="fas fa-book-dead text-primary"></i>
-                                </div>
-                                <h6 class="mb-0">Surat Kematian</h6>
-                            </div>
-                            <p class="small text-muted mb-0">Pencatatan kematian</p>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="border p-3 rounded h-100">
-                            <div class="d-flex align-items-center mb-2">
-                                <div class="bg-primary-light rounded-circle p-2 me-3">
-                                    <i class="fas fa-people-arrows text-primary"></i>
-                                </div>
-                                <h6 class="mb-0">Surat Pernyataan</h6>
-                            </div>
-                            <p class="small text-muted mb-0">Berbagai keperluan pernyataan</p>
-                        </div>
-                    </div>
+                    
                 </div>
             </div>
         </div>
