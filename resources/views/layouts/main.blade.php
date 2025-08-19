@@ -76,6 +76,16 @@
             background-color: var(--light-color);
             color: var(--primary-color);
         }
+
+        /* Tombol toggle sidebar mobile */
+        #sidebarToggle{
+            position: fixed;
+            top: 50%;
+            left: .5rem;
+            transform: translateY(-50%);
+            z-index: 1046; /* di atas backdrop (1045) */
+            padding: .6rem .7rem;
+        }
     </style>
 </head>
 <body>
@@ -114,9 +124,16 @@
         </div>
     </nav>
 
+    <!-- Tombol toggle sidebar (hanya di mobile) -->
+    <button id="sidebarToggle" class="btn btn-primary rounded-pill d-md-none"
+        type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileSidebar"
+        aria-controls="mobileSidebar" aria-label="Buka menu">
+        <i class="fa-solid fa-angle-right"></i>
+    </button>
+
     <div class="container-fluid">
         <div class="row">
-            <!-- Sidebar -->
+            <!-- Sidebar Desktop -->
             <div class="col-lg-2 col-md-3 d-none d-md-block sidebar p-0">
                 <div class="p-3">
                     <div class="text-center mb-4">
@@ -194,6 +211,58 @@
         </div>
     </div>
 
+    <!-- Sidebar Mobile (Offcanvas) -->
+    <div class="offcanvas offcanvas-start d-md-none" tabindex="-1" id="mobileSidebar" aria-labelledby="mobileSidebarLabel">
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title fw-bold" id="mobileSidebarLabel">Desa Cimenga</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Tutup"></button>
+      </div>
+      <div class="offcanvas-body p-0">
+        <div class="p-3 border-bottom text-center">
+          <img src="{{ asset('images/logo.png') }}" alt="Logo Desa" class="img-fluid" style="max-height: 60px;">
+          <div class="mt-2 fw-bold">Desa Cimenga</div>
+          <small class="text-muted">Kabupaten Kuningan</small>
+        </div>
+
+        <ul class="nav flex-column p-3">
+          <li class="nav-item">
+            <a class="nav-link" href="{{ route('dashboard') }}" id="dashboard-menu-m">
+              <i class="fas fa-tachometer-alt"></i> Dashboard
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ route('residents.show', Auth::user()->id) }}" id="residents-menu-m">
+              <i class="fas fa-user"></i> Data Diri
+            </a>
+          </li>
+
+          @if(Auth::user()->role == 'Sekretaris')
+          <li class="nav-item">
+            <a class="nav-link" href="{{ route('users.index') }}" id="users-menu-m">
+              <i class="fas fa-users"></i> Daftar Pengguna
+            </a>
+          </li>
+          @endif
+
+          <li class="nav-item">
+            <a class="nav-link" href="{{ route('letters.index') }}" id="letters-menu-m">
+              <i class="fas fa-envelope"></i> Surat Menyurat
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ route('petitions.index') }}" id="reports-menu-m">
+              <i class="fas fa-chart-bar"></i> Laporan
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#" id="settings-menu-m">
+              <i class="fas fa-cog"></i> Pengaturan
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
     <!-- Footer -->
     <footer class="footer mt-auto py-3 bg-light border-top">
         <div class="container-fluid">
@@ -213,43 +282,46 @@
     
     <!-- Custom JS -->
     <script>
-        // Aktifkan tooltips
-        document.addEventListener('DOMContentLoaded', function() {
-            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-                return new bootstrap.Tooltip(tooltipTriggerEl)
-            })
-        })
-    </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Hapus semua class active terlebih dahulu
-            document.querySelectorAll('.nav-link').forEach(link => {
-                link.classList.remove('active');
-            });
+    document.addEventListener('DOMContentLoaded', function() {
+      // Tentukan menu aktif berdasarkan URL
+      const currentPath = window.location.pathname;
 
-            // Tentukan menu yang aktif berdasarkan URL
-            const currentPath = window.location.pathname;
-            let activeMenuId = 'dashboard-menu'; // default
-            
-            if (currentPath.includes('/data-diri') || currentPath.includes('/residents')) {
-                activeMenuId = 'residents-menu';
-            } else if (currentPath.includes('/pengguna') || currentPath.includes('/users')) {
-                activeMenuId = 'users-menu';
-            } else if (currentPath.includes('/surat') || currentPath.includes('/letters')) {
-                activeMenuId = 'letters-menu';
-            } else if (currentPath.includes('/laporan') || currentPath.includes('/petitions')) {
-                activeMenuId = 'reports-menu';
-            } else if (currentPath.includes('/pengaturan') || currentPath.includes('/settings')) {
-                activeMenuId = 'settings-menu';
-            } 
+      const map = [
+        { match: (p)=> p.includes('/data-diri') || p.includes('/residents'), ids: ['residents-menu','residents-menu-m'] },
+        { match: (p)=> p.includes('/pengguna') || p.includes('/users'), ids: ['users-menu','users-menu-m'] },
+        { match: (p)=> p.includes('/surat') || p.includes('/letters'), ids: ['letters-menu','letters-menu-m'] },
+        { match: (p)=> p.includes('/laporan') || p.includes('/petitions'), ids: ['reports-menu','reports-menu-m'] },
+        { match: (p)=> p.includes('/pengaturan') || p.includes('/settings'), ids: ['settings-menu','settings-menu-m'] },
+      ];
 
-            // Tambahkan class active ke menu yang sesuai
-            const activeMenu = document.getElementById(activeMenuId);
-            if (activeMenu) {
-                activeMenu.classList.add('active');
-            }
+      // default dashboard
+      let activeIds = ['dashboard-menu','dashboard-menu-m'];
+      for (const m of map) {
+        if (m.match(currentPath)) { activeIds = m.ids; break; }
+      }
+
+      // hapus active lama, lalu set yang baru
+      document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
+      activeIds.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.add('active');
+      });
+
+      // Ganti ikon panah saat offcanvas buka/tutup
+      const toggleBtn = document.getElementById('sidebarToggle');
+      const icon = toggleBtn?.querySelector('i');
+      const offcanvasEl = document.getElementById('mobileSidebar');
+      if (offcanvasEl && icon) {
+        offcanvasEl.addEventListener('show.bs.offcanvas', ()=> {
+          icon.classList.remove('fa-angle-right');
+          icon.classList.add('fa-angle-left');
         });
+        offcanvasEl.addEventListener('hide.bs.offcanvas', ()=> {
+          icon.classList.remove('fa-angle-left');
+          icon.classList.add('fa-angle-right');
+        });
+      }
+    });
     </script>
     @stack('scripts')
 </body>
