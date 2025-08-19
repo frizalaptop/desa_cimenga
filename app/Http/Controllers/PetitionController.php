@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Petition;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PetitionController extends Controller
 {
@@ -204,5 +205,29 @@ class PetitionController extends Controller
             return redirect()->back()
                 ->with('error', 'Gagal menghapus data: ' . $e->getMessage());
         }
+    }
+
+    public function statistic()
+    {
+        // Ambil jumlah surat masuk per tanggal
+        $suratMasuk = Petition::select(
+                DB::raw('DATE(created_at) as tanggal'),
+                DB::raw('COUNT(*) as total')
+            )
+            ->groupBy('tanggal')
+            ->orderBy('tanggal', 'desc')
+            ->get();
+
+        // Ambil jumlah surat keluar (status selesai) per tanggal
+        $suratKeluar = Petition::select(
+                DB::raw('DATE(updated_at) as tanggal'),
+                DB::raw('COUNT(*) as total')
+            )
+            ->where('status', 'selesai')
+            ->groupBy('tanggal')
+            ->orderBy('tanggal', 'desc')
+            ->get();
+
+        return view('petitions.statistic', compact('suratMasuk', 'suratKeluar'));
     }
 }

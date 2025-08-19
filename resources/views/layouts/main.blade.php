@@ -160,6 +160,11 @@
                                 <i class="fas fa-users"></i> Daftar Pengguna
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('petitions.statistic') }}" id="statistics-menu">
+                                <i class="fas fa-chart-line"></i> Statistik Surat
+                            </a>
+                        </li>
                         @endif
                         
                         <li class="nav-item">
@@ -242,6 +247,11 @@
               <i class="fas fa-users"></i> Daftar Pengguna
             </a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ route('petitions.statistic') }}" id="statistics-menu-m">
+              <i class="fas fa-chart-line"></i> Statistik Surat
+            </a>
+          </li>
           @endif
 
           <li class="nav-item">
@@ -292,6 +302,7 @@
         { match: (p)=> p.includes('/surat') || p.includes('/letters'), ids: ['letters-menu','letters-menu-m'] },
         { match: (p)=> p.includes('/laporan') || p.includes('/petitions'), ids: ['reports-menu','reports-menu-m'] },
         { match: (p)=> p.includes('/pengaturan') || p.includes('/settings'), ids: ['settings-menu','settings-menu-m'] },
+        { match: (p)=> p.includes('/statistik') || p.includes('/statistic'), ids: ['statistics-menu','statistics-menu-m'] },
       ];
 
       // default dashboard

@@ -29,6 +29,10 @@ Route::resource('letters', LetterController::class)
     ->middleware(['auth', 'verified'])
     ->names('letters');
 
+Route::get('petitions/statistic', [PetitionController::class, 'statistic'])
+    ->middleware(['auth', 'verified'])
+    ->name('petitions.statistic'); 
+
 Route::put('petitions/{petition}/approve', [PetitionController::class, 'approve'])
     ->middleware(['auth', 'verified'])
     ->name('petitions.approve'); 
