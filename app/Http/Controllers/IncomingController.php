@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\incoming;
+use App\Models\Incoming;
 use Illuminate\Http\Request;
 
 class IncomingController extends Controller
