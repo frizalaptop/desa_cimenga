@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\letter;
+use App\Models\Letter;
 use App\Models\Petition;
 use App\Models\Resident;
 use Illuminate\Http\Request;
